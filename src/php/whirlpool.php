@@ -1,9 +1,10 @@
 <?php
-/* @formatter:on */
+/* ViewSource */
 if (isset($_GET['source'])) {
     echo file_get_contents(__FILE__);
-    exit;
+    die();
 }
+/* endViewSource */
 
 /* Funtions */
 function randomArray($count, $min = 10, $max = 99) {
@@ -46,7 +47,6 @@ function vectorToMatrixWhirlpool($vector, $matrix = [], $vectorCount, $rows, $co
     while (true) {
 
         for ($i = $top; $i <= $right; $i++, $cursor++) {
-            //$matrix[$top][$i] = $vector[$cursor] . " ({$cursor})";
             changeValue($vector, $cursor, $matrix, $top, $i, $set);
         }
         $top++;
@@ -55,7 +55,6 @@ function vectorToMatrixWhirlpool($vector, $matrix = [], $vectorCount, $rows, $co
         }
 
         for ($i = $top; $i <= $bottom; $i++, $cursor++) {
-            //$matrix[$i][$right] = $vector[$cursor] . " ({$cursor})";
             changeValue($vector, $cursor, $matrix, $i, $right, $set);
         }
         $right--;
@@ -64,7 +63,6 @@ function vectorToMatrixWhirlpool($vector, $matrix = [], $vectorCount, $rows, $co
         }
 
         for ($i = $right; $i >= $left; $i--, $cursor++) {
-            //$matrix[$bottom][$i] = $vector[$cursor] . " ({$cursor})";
             changeValue($vector, $cursor, $matrix, $bottom, $i, $set);
         }
         $bottom--;
@@ -73,7 +71,6 @@ function vectorToMatrixWhirlpool($vector, $matrix = [], $vectorCount, $rows, $co
         }
 
         for ($i = $bottom; $i >= $top; $i--, $cursor++) {
-            //$matrix[$i][$left] = $vector[$cursor] . " ({$cursor})";
             changeValue($vector, $cursor, $matrix, $i, $left, $set);
         }
         $left++;
@@ -162,8 +159,8 @@ $vector2 = vectorToMatrixWhirlpool($vector, $matrix2, count($vector), $rows, $co
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
 <body>
@@ -207,7 +204,7 @@ $vector2 = vectorToMatrixWhirlpool($vector, $matrix2, count($vector), $rows, $co
     </div>
 </div>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </body>
