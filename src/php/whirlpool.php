@@ -1,10 +1,12 @@
 <?php
+/* @formatter:on */
 if (isset($_GET['source'])) {
     echo file_get_contents(__FILE__);
     exit;
 }
-function randomArray($count, $min = 10, $max = 99)
-{
+
+/* Funtions */
+function randomArray($count, $min = 10, $max = 99) {
     $array = [];
     for ($i = 0; $i < $count; $i++) {
         $array[$i] = rand($min, $max);
@@ -19,8 +21,7 @@ function randomArray($count, $min = 10, $max = 99)
  * @param int $max
  * @return array
  */
-function randomMatrix($rows, $cols, $min = 10, $max = 99)
-{
+function randomMatrix($rows, $cols, $min = 10, $max = 99) {
     $array = [];
     for ($i = 0; $i < $rows; $i++) {
         $array[$i] = randomArray($cols, $min, $max);
@@ -28,8 +29,7 @@ function randomMatrix($rows, $cols, $min = 10, $max = 99)
     return $array;
 }
 
-function setVM(&$vector, &$vectorElementNumber, &$matrix, &$matrixCol, &$matrixRow, &$set = true)
-{
+function changeValue(&$vector, &$vectorElementNumber, &$matrix, &$matrixCol, &$matrixRow, &$set = true) {
     if ($set) {
         $matrix[$matrixCol][$matrixRow] = $vector[$vectorElementNumber];
     } else {
@@ -37,20 +37,17 @@ function setVM(&$vector, &$vectorElementNumber, &$matrix, &$matrixCol, &$matrixR
     }
 }
 
-function vectorToMatrixWhirlpool($vector, $matrix = [], $vectorCount, $rows, $cols, $set = true)
-{
+function vectorToMatrixWhirlpool($vector, $matrix = [], $vectorCount, $rows, $cols, $set = true) {
     $left = 0;
     $right = $cols - 1;
     $top = 0;
     $bottom = $rows - 1;
     $cursor = 0;
-    $repeat = true;
-
     while (true) {
 
         for ($i = $top; $i <= $right; $i++, $cursor++) {
             //$matrix[$top][$i] = $vector[$cursor] . " ({$cursor})";
-            setVM($vector, $cursor, $matrix, $top, $i, $set);
+            changeValue($vector, $cursor, $matrix, $top, $i, $set);
         }
         $top++;
         if ($cursor >= $vectorCount || $cursor >= $cols * $rows) {
@@ -59,7 +56,7 @@ function vectorToMatrixWhirlpool($vector, $matrix = [], $vectorCount, $rows, $co
 
         for ($i = $top; $i <= $bottom; $i++, $cursor++) {
             //$matrix[$i][$right] = $vector[$cursor] . " ({$cursor})";
-            setVM($vector, $cursor, $matrix, $i, $right, $set);
+            changeValue($vector, $cursor, $matrix, $i, $right, $set);
         }
         $right--;
         if ($cursor >= $vectorCount) {
@@ -68,7 +65,7 @@ function vectorToMatrixWhirlpool($vector, $matrix = [], $vectorCount, $rows, $co
 
         for ($i = $right; $i >= $left; $i--, $cursor++) {
             //$matrix[$bottom][$i] = $vector[$cursor] . " ({$cursor})";
-            setVM($vector, $cursor, $matrix, $bottom, $i, $set);
+            changeValue($vector, $cursor, $matrix, $bottom, $i, $set);
         }
         $bottom--;
         if ($cursor >= $vectorCount) {
@@ -77,7 +74,7 @@ function vectorToMatrixWhirlpool($vector, $matrix = [], $vectorCount, $rows, $co
 
         for ($i = $bottom; $i >= $top; $i--, $cursor++) {
             //$matrix[$i][$left] = $vector[$cursor] . " ({$cursor})";
-            setVM($vector, $cursor, $matrix, $i, $left, $set);
+            changeValue($vector, $cursor, $matrix, $i, $left, $set);
         }
         $left++;
         if ($cursor >= $vectorCount) {
@@ -92,8 +89,7 @@ function vectorToMatrixWhirlpool($vector, $matrix = [], $vectorCount, $rows, $co
 
 }
 
-function printMatrix($matrix, $rows, $cols)
-{
+function printMatrix($matrix, $rows, $cols) {
     echo "<div class=\"row\"><table class=\"table table-bordered\">";
     for ($i = 0, $count = 0; $i < $rows; $i++) {
         echo "<tr>";
@@ -105,8 +101,7 @@ function printMatrix($matrix, $rows, $cols)
     echo "</table></div>";
 }
 
-function printVector($vector, $rows, $cols)
-{
+function printVector($vector, $rows, $cols) {
     echo "<div class=\"row\"><table class=\"table table-bordered \">";
     for ($i = 0, $count = 0; $i < $rows; $i++) {
         echo "<tr>";
@@ -118,21 +113,40 @@ function printVector($vector, $rows, $cols)
     echo "</table></div>";
 }
 
-// Body
+/* endFuntions */
 
-$count = 36;
+/* Body */
+
+$count = 144;
+$rows = sqrt($count);
+$cols = $rows;
+
+/* BodyGetParams */
+if (isset($_REQUEST['count']) && intval($_REQUEST['count'])) {
+    if (is_int(sqrt(intval($_REQUEST['count'])))) {
+        $count = $_REQUEST['count'];
+        $rows = sqrt($count);
+        $cols = $rows;
+    }
+} elseif (isset($_REQUEST['cols'], $_REQUEST['rows']) &&
+    intval($_REQUEST['cols']) && intval($_REQUEST['rows'])
+) {
+    $rows = intval($_REQUEST['rows']);
+    $cols = intval($_REQUEST['cols']);
+    $count = $rows * $cols;
+}
+/* endBodyGetParams */
+
 $vector = randomArray($count);
 $matrix = [];
-$cols = 6;
-$rows = 6;
-$matrix = vectorToMatrixWhirlpool($vector, $matrix, count($vector), $cols, $rows);
+$matrix = vectorToMatrixWhirlpool($vector, $matrix, count($vector), $rows, $cols);
 $matrix2 = [];
-$matrix2 = randomMatrix($cols, $rows);
+$matrix2 = randomMatrix($rows, $cols);
 $vector2 = [];
-$vector2 = vectorToMatrixWhirlpool($vector, $matrix2, count($vector), $cols, $rows, false);
+$vector2 = vectorToMatrixWhirlpool($vector, $matrix2, count($vector), $rows, $cols, false);
 
 
-//End php Body
+/* endBody */
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -161,25 +175,35 @@ $vector2 = vectorToMatrixWhirlpool($vector, $matrix2, count($vector), $cols, $ro
 <div class="container">
 
     <div class="row">
-        <h1>Random Vector</h1>
-        <? printVector($vector, $cols, $rows); ?>
+        <div class="col-sm-6">
+            <div class="col-sm-11">
+                <div class="row"><h1>Random vector input</h1></div>
+                <div class="row"><? printVector($vector, $rows, $cols); ?></div>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="col-sm-offset-1 col-sm-11">
+                <div class="row"><h1>Matrix whirlpool output</h1></div>
+                <div class="row"> <? printMatrix($matrix, $rows, $cols); ?></div>
+            </div>
+        </div>
     </div>
-
+    <hr>
     <div class="row">
-        <h1>Matrix Whirlpool</h1>
-        <? printMatrix($matrix, $cols, $rows); ?>
-    </div>
+        <div class="col-sm-6">
+            <div class="col-sm-11">
+                <div class="row"><h1>Random matrix input</h1></div>
+                <div class="row"> <? printMatrix($matrix2, $rows, $cols); ?></div>
+            </div>
+        </div>
 
-
-    <div class="row">
-        <h1>Random Matrix</h1>
-        <? printMatrix($matrix2, $cols, $rows); ?>
-    </div>
-
-
-    <div class="row">
-        <h1>Vector Whirlpool</h1>
-        <? printVector($vector2, $cols, $rows); ?>
+        <div class="col-sm-6">
+            <div class="col-sm-offset-1 col-sm-11">
+                <div class="row"><h1>Vector whirlpool output</h1></div>
+                <div class="row"><? printVector($vector2, $rows, $cols); ?></div>
+            </div>
+        </div>
     </div>
 </div>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
