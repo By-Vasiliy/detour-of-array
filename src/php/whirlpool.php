@@ -1,7 +1,9 @@
 <?php
 /* ViewSource */
 if (isset($_GET['source'])) {
-    echo file_get_contents(__FILE__);
+    echo '<!DOCTYPE html><html lang="en"><head></head><body><pre>'
+        . htmlentities(file_get_contents(__FILE__))
+        . '</pre></body></html>';
     die();
 }
 /* endViewSource */
@@ -114,10 +116,6 @@ function printVector($vector, $rows, $cols) {
 
 /* Body */
 
-$count = 144;
-$rows = sqrt($count);
-$cols = $rows;
-
 /* BodyGetParams */
 if (isset($_REQUEST['count']) && intval($_REQUEST['count'])) {
     if (is_int(sqrt(intval($_REQUEST['count'])))) {
@@ -131,6 +129,10 @@ if (isset($_REQUEST['count']) && intval($_REQUEST['count'])) {
     $rows = intval($_REQUEST['rows']);
     $cols = intval($_REQUEST['cols']);
     $count = $rows * $cols;
+} else {
+    $count = 49;
+    $rows = sqrt($count);
+    $cols = $rows;
 }
 /* endBodyGetParams */
 
