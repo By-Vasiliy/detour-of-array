@@ -1,14 +1,12 @@
 <?php
-/* ViewSource */
+
 if (isset($_GET['source'])) {
     echo '<!DOCTYPE html><html lang="en"><head></head><body><pre>'
-        . htmlentities(file_get_contents(__FILE__))
-        . '</pre></body></html>';
+            . htmlentities(file_get_contents(__FILE__))
+            . '</pre></body></html>';
     die();
 }
-/* endViewSource */
 
-/* Funtions */
 function randomArray($count, $min = 10, $max = 99) {
     $array = [];
     for ($i = 0; $i < $count; $i++) {
@@ -22,6 +20,7 @@ function randomArray($count, $min = 10, $max = 99) {
  * @param int $cols
  * @param int $min
  * @param int $max
+ *
  * @return array
  */
 function randomMatrix($rows, $cols, $min = 10, $max = 99) {
@@ -32,21 +31,22 @@ function randomMatrix($rows, $cols, $min = 10, $max = 99) {
     return $array;
 }
 
-function changeValue(&$vector, &$vectorElementNumber, &$matrix, &$matrixCol, &$matrixRow, &$set = true) {
+function changeValue(&$vector, &$vectorElementNumber, &$matrix, &$matrixCol, &$matrixRow, &$set = TRUE) {
     if ($set) {
         $matrix[$matrixCol][$matrixRow] = $vector[$vectorElementNumber];
-    } else {
+    }
+    else {
         $vector[$vectorElementNumber] = $matrix[$matrixCol][$matrixRow];
     }
 }
 
-function vectorToMatrixWhirlpool($vector, $matrix = [], $vectorCount, $rows, $cols, $set = true) {
+function vectorToMatrixWhirlpool($vector, $matrix = [], $vectorCount, $rows, $cols, $set = TRUE) {
     $left = 0;
     $right = $cols - 1;
     $top = 0;
     $bottom = $rows - 1;
     $cursor = 0;
-    while (true) {
+    while (TRUE) {
 
         for ($i = $top; $i <= $right; $i++, $cursor++) {
             changeValue($vector, $cursor, $matrix, $top, $i, $set);
@@ -82,7 +82,8 @@ function vectorToMatrixWhirlpool($vector, $matrix = [], $vectorCount, $rows, $co
     }
     if ($set) {
         return $matrix;
-    } else {
+    }
+    else {
         return $vector;
     }
 
@@ -112,29 +113,27 @@ function printVector($vector, $rows, $cols) {
     echo "</table></div>";
 }
 
-/* endFuntions */
 
-/* Body */
-
-/* BodyGetParams */
 if (isset($_REQUEST['count']) && intval($_REQUEST['count'])) {
     if (is_int(sqrt(intval($_REQUEST['count'])))) {
         $count = $_REQUEST['count'];
         $rows = sqrt($count);
         $cols = $rows;
     }
-} elseif (isset($_REQUEST['cols'], $_REQUEST['rows']) &&
-    intval($_REQUEST['cols']) && intval($_REQUEST['rows'])
+}
+elseif (isset($_REQUEST['cols'], $_REQUEST['rows']) &&
+        intval($_REQUEST['cols']) && intval($_REQUEST['rows'])
 ) {
     $rows = intval($_REQUEST['rows']);
     $cols = intval($_REQUEST['cols']);
     $count = $rows * $cols;
-} else {
+}
+else {
     $count = 49;
     $rows = sqrt($count);
     $cols = $rows;
 }
-/* endBodyGetParams */
+
 
 $vector = randomArray($count);
 $matrix = [];
@@ -142,22 +141,21 @@ $matrix = vectorToMatrixWhirlpool($vector, $matrix, count($vector), $rows, $cols
 $matrix2 = [];
 $matrix2 = randomMatrix($rows, $cols);
 $vector2 = [];
-$vector2 = vectorToMatrixWhirlpool($vector, $matrix2, count($vector), $rows, $cols, false);
+$vector2 = vectorToMatrixWhirlpool($vector, $matrix2, count($vector), $rows, $cols, FALSE);
 
-
-/* endBody */
 ?>
-  <!DOCTYPE html>
-  <html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 
-  <head>
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Detour of array, whirlpool!</title>
 
     <!-- Bootstrap -->
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"
+          rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -165,68 +163,68 @@ $vector2 = vectorToMatrixWhirlpool($vector, $matrix2, count($vector), $rows, $co
     <script src="//oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="//oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-  </head>
+</head>
 
-  <body>
-    <header class="container">
-      <div class="row">
+<body>
+<header class="container">
+    <div class="row">
         <h1>Detour of array, whirlpool!</h1>
-      </div>
-    </header>
-    <div class="container">
-
-      <div class="row">
-        <div class="col-sm-6">
-          <div class="col-sm-11">
-            <div class="row">
-              <h1>Random vector input</h1>
-            </div>
-            <div class="row">
-              <? printVector($vector, $rows, $cols); ?>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-sm-6">
-          <div class="col-sm-offset-1 col-sm-11">
-            <div class="row">
-              <h1>Matrix whirlpool output</h1>
-            </div>
-            <div class="row">
-              <? printMatrix($matrix, $rows, $cols); ?>
-            </div>
-          </div>
-        </div>
-      </div>
-      <hr>
-      <div class="row">
-        <div class="col-sm-6">
-          <div class="col-sm-11">
-            <div class="row">
-              <h1>Random matrix input</h1>
-            </div>
-            <div class="row">
-              <? printMatrix($matrix2, $rows, $cols); ?>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-sm-6">
-          <div class="col-sm-offset-1 col-sm-11">
-            <div class="row">
-              <h1>Vector whirlpool output</h1>
-            </div>
-            <div class="row">
-              <? printVector($vector2, $rows, $cols); ?>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-  </body>
+</header>
+<div class="container">
 
-  </html>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="col-sm-11">
+                <div class="row">
+                    <h1>Random vector input</h1>
+                </div>
+                <div class="row">
+                    <? printVector($vector, $rows, $cols); ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="col-sm-offset-1 col-sm-11">
+                <div class="row">
+                    <h1>Matrix whirlpool output</h1>
+                </div>
+                <div class="row">
+                    <? printMatrix($matrix, $rows, $cols); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="col-sm-11">
+                <div class="row">
+                    <h1>Random matrix input</h1>
+                </div>
+                <div class="row">
+                    <? printMatrix($matrix2, $rows, $cols); ?>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="col-sm-offset-1 col-sm-11">
+                <div class="row">
+                    <h1>Vector whirlpool output</h1>
+                </div>
+                <div class="row">
+                    <? printVector($vector2, $rows, $cols); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+</body>
+
+</html>
